@@ -86,8 +86,8 @@ The project has been scaffolded using Laravel sails
 
 1. Clone the project
     ```shell
-    git clone https://github.com/denisakp/SquaHR_url_shortener.git
-    cd SquaHR_url_shortener
+    https://github.com/DVRachid/Task_Management.git
+    cd Task_Management
     ```
 
 2. Install composer dependencies
