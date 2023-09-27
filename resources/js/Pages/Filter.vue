@@ -1,0 +1,79 @@
+<script setup>
+import { router } from '@inertiajs/vue3';
+defineProps({
+  "tasks":Object
+})
+function create(){
+  return router.get("/tasks/create")
+}
+function Destroy(tasks) {
+
+const isConfirmed = window.confirm("Are you sure you want to delete this task?");
+
+if (isConfirmed) {
+
+  return router.delete("/tasks/" + tasks);
+} else {
+  
+  return "Delete action cancelled.";
+}
+}
+function Edit(tasks){
+  
+  return router.get("/tasks/"+tasks)
+}
+function Sort() {
+  return router.get("/tasks/sort/date");
+}
+function Back(){
+  return router.get("/tasks");
+}
+</script>
+<template>
+  <AuthenticatedLayout>
+
+    <div>
+    
+      <header class="bg-white ">
+          <div  class="col-md-3 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 ">
+            <h1 class="text-centre text-3xl font-bold tracking-tight ">
+              Filter By {{ tasks[0].status }}
+            </h1>
+          </div>
+        </header>
+        <div>
+          <table class="table table-bordered table-hover ">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Due Date</th>
+                <th colspan="4" class="text-centre">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="task in tasks">
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td><span
+                    :class="{ 'text-success': task.status === 'Completed', 'text-warning': task.status === 'In Progress' }">{{
+                      task.status }}</span></td>
+                <td>{{ task.datedue }}</td>
+                <td >
+                  <button @click.prevent="create()" class="btn btn-outline-success">Create</button>
+                 </td><td> <button @click.prevent="Edit(task.id)" class="btn btn-outline-primary">Edit</button>
+                 </td><td>  <button @click.prevent="Destroy(task.id)" class="btn btn-outline-danger">Delete</button>
+                </td><td><button @click.prevent="Sort()" class="btn btn-outline-info">Sort By Date</button>
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+
+        </div></div >
+        <div class="mx-auto col-md-3">
+          <button class= "btn btn-success" type="submit" @click.prevent="Back()" >Back</button>
+        </div>
+  </AuthenticatedLayout>
+</template>
