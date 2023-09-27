@@ -17,15 +17,15 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
-
+// Route::get('/', function () {
+//     return Inertia::render('Login', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
+Route::redirect('/', '/tasks');
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -43,12 +43,14 @@ Route::get('/tasks', [TasksController::class, 'index'])->name("tasks.index");
 
 require __DIR__.'/auth.php';
 
-
-Route::get('/tasks/create', [TasksController::class, 'create'])->name("tasks.create");
+Route::middleware('auth')->group(function () {
+  Route::get('/tasks/create', [TasksController::class, 'create'])->name("tasks.create");
 Route::post('/tasks', [TasksController::class, 'store'])->name("tasks.store");
 Route::delete('/tasks/{tasks}', [TasksController::class, 'destroy'])->name("tasks.delete");
 Route::get('/tasks/{tasks}', [TasksController::class, 'edit'])->name("tasks.edit");
 Route::put('/tasks/{tasks}', [TasksController::class, 'update'])->name("tasks.update");
+});
+
 
 
 Route::get('/tasks/filter/{status}', [TasksController::class, 'filterByStatus'])->name('tasks.filter');
